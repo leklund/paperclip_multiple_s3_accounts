@@ -1,0 +1,1 @@
+require File.dirname(__FILE__) + '/lib/paperclip_multiple_s3_accounts'

@@ -1,0 +1,28 @@
+Paperclip-multiple-s3-accounts
+==============================
+
+PaperclipMultipleS3Accounts extends Paperclip (https://github.com/thoughtbot/paperclip). It adds functionality to pass the s3_credentials for has_attached_file as a Proc. This allows the use of for multiple S3 accounts per object in a single application.
+
+
+Example
+=======
+
+In your model:
+
+  class User < ActiveRecord::Base
+    belongs_to :s3bucket
+    
+    has_attached_file :photo,
+                      :storage => :s3,
+                      :s3_permissions => "public-read",
+                      :path => "/:attachment/:id/:basename.:extension",
+                      :s3_credentials => (lambda do |attachment|
+                            h = {
+                              'bucket'            => attachment.instance.s3bucket.name,
+                              'access_key_id'     => attachment.instance.s3bucket.access_key_id,
+                              'secret_access_key' => attachment.instance.s3bucket.secret_access_key
+                            }
+                          end)
+
+
+Copyright (c) 2011 Lukas Eklund, released under the MIT license
